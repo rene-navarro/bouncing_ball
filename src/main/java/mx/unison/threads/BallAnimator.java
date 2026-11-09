@@ -1,9 +1,12 @@
-package mx.unison;
+package mx.unison.threads;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.util.logging.Logger;
 
 public class BallAnimator implements Runnable {
+
+    public static final Logger LOG = Logger.getLogger(BallAnimator.class.getName());
     public static final int MAX_X = 640;
     public static final int MAX_Y = 480;
     public static final int SIGN = -1;
@@ -12,15 +15,15 @@ public class BallAnimator implements Runnable {
     public static final int DY = 10;
     private Ellipse2D.Double ball;
 
-    private int ballX;
-    private int ballY;
+    private double ballX;
+    private double ballY;
 
     public BallAnimator(Shape shape) {
         ball = ( Ellipse2D.Double) shape;
-        ballX = 320;
-        ballY = 240;
-        ball.x = ballX ;
-        ball.y = ballY;
+        ballX = ball.x;
+        ballY = ball.y;
+        //ball.x = ballX ;
+        //ball.y = ballY;
     }
 
     @Override
@@ -30,6 +33,9 @@ public class BallAnimator implements Runnable {
 
         while( true ) {
 
+            double ballWidth = ball.width;
+            double ballHeight = ball.height;
+
             if( ballY < 0 ) {
                 sY = sY * SIGN;
             }
@@ -37,21 +43,22 @@ public class BallAnimator implements Runnable {
             if( ballX < 0 ) {
                 sX = sX * SIGN;
             }
-            if( ballY > (MAX_Y - 20) ) {
+            if( ballY > (MAX_Y - ballHeight) ) {
                 sY = sY * SIGN;
             }
 
-            if( ballX > (MAX_X - 20) ) {
+            if( ballX > (MAX_X - ballWidth) ) {
                 sX = sX * SIGN;
             }
             ballX = ballX + (DX * sX) ;
             ballY = ballY + (DY * sY);
             ball.x = ballX ;
             ball.y = ballY;
+            LOG.info( "Ball X: " + ballX + " Y: " + ballY );
             try {
                 Thread.sleep(150L);
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+               LOG.severe(e.getMessage());
             }
         }
 

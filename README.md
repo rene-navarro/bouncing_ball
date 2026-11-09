@@ -99,13 +99,13 @@ El proyecto aplica el plugin `java`, pero **no configura** el plugin `applicatio
 **Linux/macOS**
 
 ```bash
-java -cp build/classes/java/main mx.unison.Main
+java -cp build/classes/java/main mx.unison.threads.Main
 ```
 
 **Windows (PowerShell)**
 
 ```powershell
-java -cp build\classes\java\main mx.unison.Main
+java -cp build\classes\java\main mx.unison.threads.Main
 ```
 
 También puede abrirse el proyecto en **IntelliJ IDEA** y ejecutar el método `main` de `mx.unison.Main`.

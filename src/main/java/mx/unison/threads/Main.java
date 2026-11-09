@@ -1,4 +1,4 @@
-package mx.unison;
+package mx.unison.threads;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +18,7 @@ public class Main {
 
     private static void createAndShowGUI() {
         JFrame f = new JFrame("Bouncy Ball");
+        f.setResizable(false);
 
         JPanel p = new JPanel(new BorderLayout());
         Board board = new Board();

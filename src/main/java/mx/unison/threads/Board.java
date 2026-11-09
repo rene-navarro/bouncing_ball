@@ -1,15 +1,17 @@
-package mx.unison;
+package mx.unison.threads;
 
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Ellipse2D;
 import java.util.logging.Logger;
 
 public class Board  extends JComponent
-        implements Runnable,         KeyListener {
+        implements Runnable,         KeyListener , ComponentListener {
 
     private static final Logger LOG = Logger.getLogger(Board.class.getName());
 
@@ -19,6 +21,8 @@ public class Board  extends JComponent
     private Thread ballAnimator;  // contrala el movimiento de la pelota
     private Thread boardRefresher;  // controla cada cuando se refresca el tablero
 
+    private BallAnimator ballModel;
+
     public Board() {
         super();
 
@@ -26,14 +30,17 @@ public class Board  extends JComponent
         setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.BLACK));
 
         // dimensiones y posicion iniciales de la pelota
-        ball = new Ellipse2D.Double(20,320,20,20);
+        ball = new Ellipse2D.Double(320,240,20,20);
 
-        BallAnimator ballAnimator = new BallAnimator(ball);
-        this.ballAnimator = new Thread(ballAnimator,"BounceThread");
-        this.ballAnimator.start();
+        ballModel = new BallAnimator(ball);
+        ballAnimator = new Thread(ballModel,"BounceThread");
+        ballAnimator.start();
 
         boardRefresher = new Thread( this,"RefreshThread");
         boardRefresher.start();
+
+       // addComponentListener(this);
+
     }
 
     protected void paintComponent(Graphics g) {
@@ -73,6 +80,7 @@ public class Board  extends JComponent
     public void run() {
         while ( true ) {
             repaint();
+
             try {
                 Thread.sleep(100L);
             } catch (InterruptedException e) {
@@ -102,9 +110,11 @@ public class Board  extends JComponent
         //System.out.println( e.getKeyChar() );
         char key = e.getKeyChar();
         if( key == 'O' || key == 'o' ) {
+            LOG.info("ZOOM_OUT");
             zoomOut();
         }
         if( key == 'I' || key == 'i' ) {
+            LOG.info("ZOOM_IN");
             zoomIn();
         }
     }
@@ -116,6 +126,29 @@ public class Board  extends JComponent
 
     @Override
     public void keyReleased(KeyEvent e) {
+
+    }
+
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        LOG.info("REDIM");
+        Insets insets = getInsets();
+        System.out.printf("%s", insets.toString());
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
 
     }
 }
