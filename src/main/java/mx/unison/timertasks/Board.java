@@ -38,10 +38,14 @@ public class Board extends JComponent
 
         ballModel = new BallAnimator(ball);
         ballAnimator = new Timer("BounceThread");
-        ballAnimator.schedule(ballModel,  150);
+        //ballAnimator.schedule(ballModel,  150);
+        ballAnimator.scheduleAtFixedRate(ballModel, 0, 150);
+
+
 
         boardRefresher = new Timer("BoardRefresher");
-        boardRefresher.schedule(new BoardUpdater(this), 100);
+        //boardRefresher.schedule(new BoardUpdater(this), 100);
+        boardRefresher.scheduleAtFixedRate(new BoardUpdater(this), 0, 100);
 
     }
 
