@@ -13,7 +13,7 @@ import java.util.Timer;
 
 
 public class Board extends JComponent
-        implements ActionListener, KeyListener  {
+        implements  KeyListener  {
 
     private static final Logger LOG = Logger.getLogger(Board.class.getName());
 
@@ -24,6 +24,8 @@ public class Board extends JComponent
     private Timer boardRefresher;  // controla cada cuando se refresca el tablero
 
     private BallAnimator ballModel;  // modelo de la pelota
+
+    private BoardUpdater boardModel;
 
     private boolean paused = false;  // indica si el tablero esta pausado o no
 
@@ -45,7 +47,8 @@ public class Board extends JComponent
 
         boardRefresher = new Timer("BoardRefresher");
         //boardRefresher.schedule(new BoardUpdater(this), 100);
-        boardRefresher.scheduleAtFixedRate(new BoardUpdater(this), 0, 100);
+        boardModel = new BoardUpdater(this);
+        boardRefresher.scheduleAtFixedRate(boardModel, 0, 100);
 
     }
 
@@ -132,16 +135,13 @@ public class Board extends JComponent
 
     public void pause() {
         paused = true;
-
+        boardModel.pause();
     }
 
     public void resume() {
         paused = false;
-
+        boardModel.resume();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        repaint();
-    }
+
 }
